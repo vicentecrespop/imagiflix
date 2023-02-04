@@ -32,6 +32,13 @@ function App() {
   const [loading, setLoading] = useState(true)
   const [searching, setSearching] = useState(false)
 
+  const [showSeries, setShowSeries] = useState(false)
+  const [showMovies, setShowMovies] = useState(false)
+  const [genre, setGenre] = useState(0)
+  const [genreName, setGenreName] = useState('')
+  const [moviesByGenre, setMoviesByGenre] = useState([])
+  const [seriesByGenre, setSeriesByGenre] = useState([])
+
   useEffect(() => {
     emmiter.addListener(EVENTS.PosterClick, getTitle)
     emmiter.addListener(EVENTS.ModalClose, () => setTitle({}))
@@ -51,20 +58,39 @@ function App() {
     }
 
     fetchData()
-
   }, [])
 
-  const getFeaturedMovie = () => movies && movies['results'][0]
+  const getFeaturedMovie = () => moviesByGenre.length !== 0 ? moviesByGenre[0] : movies && movies['results'][0]
+
+  const getFeaturedSeries = () => seriesByGenre.length !== 0 ? seriesByGenre[0] : series && series['results'][0]
   
   const featuredMovie = getFeaturedMovie() || {}
+
+  const featuredSeries = getFeaturedSeries() || {}
 
   const getMoviesList = () => {
     if(movies) {
       const [ featured, ...moviesList ]: [Object, Object] = movies['results']
-      return moviesList
+      let moviesNew: any[] = moviesList
+      if(genre && moviesByGenre.length !== 0) {
+        moviesNew = moviesByGenre
+      }
+      return moviesNew
     }
     return []
   }  
+
+  const getSeriesList = () => {
+    if(series) {
+      const [ featured, ...seriesList ] : [Object, Object] = series['results']
+      let seriesNew: any[] = seriesList
+      if(genre && seriesByGenre.length !== 0) {
+        seriesNew = seriesByGenre
+      }
+      return seriesNew
+    }
+    return []
+  }
 
   const getTitle = async ({type, id}: Title) => {
       const title = await fetch(`${URL}/${type}/${id}?api_key=${APIKEY}`)
@@ -78,17 +104,39 @@ function App() {
       {loading && (
         <>
           <Loading />
-          <Navbar />
+          <Navbar setShowSeries={setShowSeries} showSeries={showSeries} setShowMovies={setShowMovies} showMovies={showMovies} setGenre={setGenre} setGenreName={setGenreName}/>
         </>
       )}
-      {!loading  && (
+      {!loading  && !showSeries && !showMovies && (
         <>
-          <Navbar searching={searching}/>
+          <Navbar searching={searching} setSeriesByGenre={setSeriesByGenre} setMoviesByGenre={setMoviesByGenre} showSeries={showSeries} setShowSeries={setShowSeries} setShowMovies={setShowMovies} showMovies={showMovies} setGenre={setGenre} setGenreName={setGenreName}/>
           {!searching && (
             <>
-              <Hero {...featuredMovie}/>
+              <Hero {...featuredMovie} type_movie={true}/>
               <Carousel title='Filmes populares' data={getMoviesList()} />
-              {series && <Carousel title='Séries populares'data={series['results']}/>}
+              {series && <Carousel title='Séries populares'data={series['results']} />}
+            </>
+          )}
+        </>
+      )}
+      {!loading  && !showSeries && showMovies && (
+        <>
+          <Navbar searching={searching} setSeriesByGenre={setSeriesByGenre} setMoviesByGenre={setMoviesByGenre} showSeries={showSeries} setShowSeries={setShowSeries} setShowMovies={setShowMovies} showMovies={showMovies} setGenreName={setGenreName} setGenre={setGenre}/>
+          {!searching && (
+            <>
+              <Hero {...featuredMovie} type_movie={true}/>
+              <Carousel title='Filmes populares' data={getMoviesList()} genreName={genreName}  />
+            </>
+          )}
+        </>
+      )}
+      {!loading  && showSeries && !showMovies && (
+        <>
+          <Navbar searching={searching} setSeriesByGenre={setSeriesByGenre} setMoviesByGenre={setMoviesByGenre} showSeries={showSeries} setShowSeries={setShowSeries} setShowMovies={setShowMovies} showMovies={showMovies} setGenre={setGenre} setGenreName={setGenreName}/>
+          {!searching && (
+            <>
+              <Hero {...featuredSeries} type_movie={false}/>
+              <Carousel title='Séries populares' data={getSeriesList()} genreName={genreName}/>
             </>
           )}
         </>
