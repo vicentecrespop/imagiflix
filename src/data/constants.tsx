@@ -1,6 +1,6 @@
 const URL = 'https://api.themoviedb.org/3'
 const IMAGEURL = 'https://image.tmdb.org/t/p'
-const APIKEY = '61084dc0cb288393916ddbe4b5dfb33e'
+const APIKEY = process.env.REACT_APP_APIKEY
 const EVENTS = {
     PosterClick: 'PosterClick',
     ModalClose: 'ModalClose',
