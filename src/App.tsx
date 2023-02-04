@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react'
 
 import { APIKEY, URL, EVENTS } from './data/constants';
 import emmiter from './utils/eventEmmiter';
