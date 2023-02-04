@@ -7,7 +7,7 @@ import { IMAGEURL } from "../data/constants";
 import placeholder from '../assets/hero.jpg'
 import Score from "./Score";
 
-const Hero = ({ backdrop_path = null, title = 'Avenger Endgame', vote_average = 10 }) => {
+const Hero = ({ type_movie = true, backdrop_path = null, name = 'The Office', title = 'Avenger Endgame', vote_average = 10 }) => {
 
     return (
     <header className="box-border relative min-h-screen -mb-32">
@@ -15,7 +15,7 @@ const Hero = ({ backdrop_path = null, title = 'Avenger Endgame', vote_average = 
         <div className="absolute w-full left-0 bottom-0 h-full bg-gradient-to-b from-transparent to-black"></div>
         <article className="absolute bottom-0 mb-64 px-8">
             <p className="text-3xl">Assista agora:</p>
-            <h2 className="text-6xl font-black">{title}</h2>
+            <h2 className="text-6xl font-black">{type_movie ? title : name}</h2>
             <p className="text-base">
                 Nota <Score value={vote_average} />
             </p>

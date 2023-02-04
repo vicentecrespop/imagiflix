@@ -12,9 +12,10 @@ import './Carousel.css';
 interface CarouselData {
     title?: string,
     data?: movie[],
+    genreName?: string
 }
 
-const Carousel = ({ title = 'Filmes em destaque', data = mockData }: CarouselData) => {
+const Carousel = ({ title = 'Filmes em destaque', data = mockData, genreName }: CarouselData) => {
     enum Direction {
         left,
         right
@@ -36,7 +37,7 @@ const Carousel = ({ title = 'Filmes em destaque', data = mockData }: CarouselDat
 
     return (
         <section className='carousel'>
-            <h2 className='relative z-10 font-bold text-2xl ml-8'>{title}</h2>
+            <h2 className='relative z-10 font-bold text-2xl ml-8'>{genreName ? genreName : title}</h2>
             <Slick className='relative mb-8' {...options}>
                 {data.map((movie, index) => Poster(movie, index))}
             </Slick>
